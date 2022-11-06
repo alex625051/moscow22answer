@@ -1,0 +1,43 @@
+<!--
+        Укажите свой API-ключ. Тестовый ключ НЕ БУДЕТ работать на других сайтах.
+        Получить ключ можно в Кабинете разработчика: https://developer.tech.yandex.ru/keys/
+    -->
+<script src="https://yandex.st/jquery/2.2.3/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript"
+        src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=60445215-6d3a-4f88-87fe-8d52b72e5bc9"></script>
+<div id="map" style='width: 100%; height: 100%;padding: 0; margin: 0;'></div>
+
+<script>
+    ymaps.ready(init);
+
+    function init() {
+        var myMap = new ymaps.Map('map', {center: [55.4792046, 37.3273304], zoom: 9}, {controls: [], minZoom: 9});
+
+        objectManager = new ymaps.ObjectManager({
+            // Чтобы метки начали кластеризоваться, выставляем опцию.
+            clusterize: true,
+            // ObjectManager принимает те же опции, что и кластеризатор.
+            gridSize: 64,
+            clusterDisableClickZoom: true,
+            geoObjectOpenBalloonOnClick: true,
+            geoObjectHasHint: true,
+            clusterOpenBalloonOnClick: false,
+        });
+
+        // Чтобы задать опции одиночным объектам и кластерам,
+        // обратимся к дочерним коллекциям ObjectManager.
+        objectManager.objects.options.set('preset', 'islands#greenDotIcon');
+        objectManager.clusters.options.set('preset', 'islands#greenClusterIcons');
+        myMap.geoObjects.add(objectManager);
+
+        $.ajax({
+            url: "/arrangeKali/api/v1/get_points_collection/testArrangeId",
+            dataType: "json"
+        }).done(function (data) {
+            console.log(data['data'])
+            objectManager.add(data['data']);
+        });
+
+
+    }
+</script>

@@ -1,0 +1,52 @@
+<!--
+        Укажите свой API-ключ. Тестовый ключ НЕ БУДЕТ работать на других сайтах.
+        Получить ключ можно в Кабинете разработчика: https://developer.tech.yandex.ru/keys/
+    -->
+<script type="text/javascript" src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=60445215-6d3a-4f88-87fe-8d52b72e5bc9"></script>
+<div id="map" style='width: 100%; height: 100%;padding: 0; margin: 0;'></div>
+
+<script>
+ymaps.ready(init);
+function init()
+{
+    var myMap = new ymaps.Map('map', { center: [55.4792046, 37.3273304], zoom: 9 }, { controls: [], minZoom: 9 });
+
+    var remoteObjectManager1 = new ymaps.RemoteObjectManager('/h3grid/api/v1/hexes/%b/%z',
+    {
+		options: {splitRequests:false
+		},
+				splitRequests:true,
+        // Опции кластеров задаются с префиксом cluster.
+        clusterHasBalloon: true,
+        // Опции объектов задаются с префиксом geoObject.
+        geoObjectOpenBalloonOnClick: false,
+        geoObjectStrokeOpacity: 0.5,
+        geoObjectFill: false,
+        geoObjectOpacity: 0.5,
+    });
+
+    // Добавим менеджер на карту.
+    myMap.geoObjects.add(remoteObjectManager1);
+
+
+	    function onObjectEvent (e) {
+        var objectId = e.get('objectId');
+        if (e.get('type') == 'mouseenter') {
+            // Метод setObjectOptions позволяет задавать опции объекта "на лету".
+            remoteObjectManager.objects.setObjectOptions(objectId, {
+                opacity: 0.7
+            });
+        } else {
+            remoteObjectManager.objects.setObjectOptions(objectId, {
+                opacity: 0.5
+            });
+        }
+    }
+
+
+    remoteObjectManager.objects.events.add(['mouseenter', 'mouseleave'], onObjectEvent);
+
+
+
+}
+</script>

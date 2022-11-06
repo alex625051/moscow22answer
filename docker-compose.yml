@@ -1,0 +1,11 @@
+version: '3.9'
+services:
+  flask_web:
+    container_name: mapi22
+    build: .
+    ports:
+      - 5000:80
+    restart: unless-stopped
+networks:
+  backend:
+    driver: bridge
