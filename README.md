@@ -12,6 +12,6 @@ GET http://37.230.196.15/arrangeKali/api/v1/postArrangeOrder/?targetArea=${targe
     В данной версии работает только район, целевое количество постоматов
 
 
-#DEPLOY
+# DEPLOY
  docker image build -t mapi22 .
  docker-compose up --build -d
